@@ -18,7 +18,7 @@ jobs:
           fi
 
       - name: Build Docker image
-        run: docker build -t myacr.azurecr.io/myapp:${{ env.TAG }} .
+        run: docker build -t ${{ secrets.ACR_URI }}/myapp:${{ env.TAG }} .
 
       - name: Login to ACR
         uses: azure/docker-login@v1
