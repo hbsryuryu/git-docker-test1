@@ -1,0 +1,10 @@
+uvicorn
+fastapi
+openai
+python-dotenv
+azure-ai-projects
+azure-identity
+azure-search-documents
+sqlalchemy
+mysql-connector-python
+gunicorn
