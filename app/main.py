@@ -19,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"]      
 )
 
-# リクエストボディのモデル定義
+# リクエストボディのモデル定義1
 class ChatRequest(BaseModel):
     prompt: str
 
