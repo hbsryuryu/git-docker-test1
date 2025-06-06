@@ -1,0 +1,26 @@
+name: Build and Push Docker image to Azure Container Registry  # このワークフローの名前（GitHub上に表示される）
+
+on:  # ↓ この下で、どんな操作（トリガー）があったら実行するかを指定
+  push:  # コードが GitHub に「push（アップロード）」されたときに実行
+    branches:  # ↓ どのブランチに push されたときかを指定
+      - main  # 「main」ブランチに push されたときに実行される
+
+jobs:  # ここから処理の本体（ジョブ）を定義する
+  build-and-push:  # ジョブの名前（何をする処理か、わかりやすくつけられる）
+    runs-on: ubuntu-latest  # GitHub が自動で用意する仮想マシン（Linux）上で動かす
+
+    steps:  # このジョブで実行する手順のリスト
+    - name: Checkout repository  # ① リポジトリの中身を取得するステップ
+      uses: actions/checkout@v3  # GitHub公式の「コードを取得する」Actionを使う
+
+    - name: Log in to Azure Container Registry  # ② Azure のコンテナレジストリにログインする
+      uses: azure/docker-login@v1  # Microsoft が用意した Docker ログイン用アクション
+      with:  # ↓ ログインに必要な情報を設定
+        login-server: myacrname.azurecr.io  # ACR のログインサーバー名（Azureポータルで確認）
+        username: ${{ secrets.ACR_USERNAME }}  # GitHub Secrets に保存した ACR のユーザー名
+        password: ${{ secrets.ACR_PASSWORD }}  # GitHub Secrets に保存した ACR のパスワード
+
+    - name: Build and Push Docker image  # ③ Docker イメージを作って ACR にアップロードする
+      run: |  # ↓ 複数行のコマンドを実行
+        docker build -t myacrname.azurecr.io/my-fastapi-app:latest .  # カレントディレクトリから Docker イメージを作成
+        docker push myacrname.azurecr.io/my-fastapi-app:latest  # 作ったイメージを ACR にアップロード
