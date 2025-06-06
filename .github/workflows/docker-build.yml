@@ -28,4 +28,4 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Push Docker image
-        run: docker push myacr.azurecr.io/myapp:${{ env.TAG }}
+        run: docker push ${{ secrets.ACR_URI }}/myapp:${{ env.TAG }}
